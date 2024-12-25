@@ -1,15 +1,9 @@
-import abc
-
 import numpy as np
 
-
-class RandomGenerator(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def generate(self, size: int | tuple[int, ...]) -> np.ndarray:
-        pass
+from random_generators.base_random_generator import BaseRandomGenerator
 
 
-class UniformRandomGenerator(RandomGenerator):
+class UniformBaseRandomGenerator(BaseRandomGenerator):
     def __init__(self, v_min: float = 0, v_max: float = 1):
         assert v_min < v_max
         self.v_min = v_min
@@ -23,13 +17,20 @@ class UniformRandomGenerator(RandomGenerator):
         return randoms
 
 
-class NormalRandomGenerator(RandomGenerator):
-    def __init__(self, mean: float, std: float, v_half_range: float | None = None):
+class NormalBaseRandomGenerator(BaseRandomGenerator):
+    def __init__(self, mean: float, std: float, v_half_range: float | str | None = "pos"):
         self.mean = mean
         self.std = std
 
-        assert v_half_range is None or v_half_range > 0
-        self.v_half_range = v_half_range
+        match v_half_range:
+            case "pos":
+                self.v_half_range = mean / 2
+            case None:
+                self.v_half_range = None
+            case float() if v_half_range > 0:
+                self.v_half_range = v_half_range
+            case _:
+                raise ValueError("invalid v_half_range %s" % str(v_half_range))
 
     def generate(self, size: int | tuple[int, ...]) -> np.ndarray:
         if self.v_half_range is None:
@@ -47,11 +48,11 @@ class NormalRandomGenerator(RandomGenerator):
 
 
 if __name__ == "__main__":
-    random_uni = UniformRandomGenerator(-5, 5)
+    random_uni = UniformBaseRandomGenerator(-5, 5)
     print(random_uni.generate(8))
 
-    random_norm_unbound = NormalRandomGenerator(0, 5)
+    random_norm_unbound = NormalBaseRandomGenerator(0, 5)
     print(random_norm_unbound.generate(8))
 
-    random_norm_bound = NormalRandomGenerator(0, 5, 2.5)
+    random_norm_bound = NormalBaseRandomGenerator(0, 5, 2.5)
     print(random_norm_bound.generate(8))

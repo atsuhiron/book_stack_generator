@@ -2,7 +2,7 @@ from typing import Callable
 
 import numpy as np
 
-import random_generator as rg
+from random_generators.base_random_generator import BaseRandomGenerator
 
 
 type ColMapping = Callable[[np.ndarray], np.ndarray]
@@ -26,9 +26,9 @@ def dechromic_col_map(x: np.ndarray) -> np.ndarray:
     return x + (dec_vec*dec_amp)
 
 
-class ColorGenerator:
+class ColorGenerator(BaseRandomGenerator):
     def __init__(self,
-                 ran_gen: rg.RandomGenerator,
+                 ran_gen: BaseRandomGenerator,
                  col_map: ColMapping | None = None):
         self.ran_gen = ran_gen
         if col_map is None:
@@ -36,22 +36,27 @@ class ColorGenerator:
         else:
             self.col_map = col_map
 
-    def generate(self) -> np.ndarray:
-        raw = self.ran_gen.generate(3) * 255
-        mapped = self.col_map(raw)
-        return mapped.astype(np.uint8)
+    def generate(self, size: int) -> np.ndarray:
+        arr_n3 = np.zeros((size, 3))
+
+        for i in range(size):
+            raw = self.ran_gen.generate(3) * 255
+            mapped = self.col_map(raw)
+            arr_n3[i] = mapped
+        return arr_n3.astype(np.uint8)
 
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
+    from random_generators.float_generator import UniformBaseRandomGenerator
 
     tile_size = (6, 10)
     tiles = np.zeros(tile_size + (3,), dtype=np.uint8)
-    cg = ColorGenerator(rg.UniformRandomGenerator(), dechromic_col_map)
+    cg = ColorGenerator(UniformBaseRandomGenerator(), dechromic_col_map)
 
     for i in range(tile_size[0]):
         for j in range(tile_size[1]):
-            tiles[i, j] = cg.generate()
+            tiles[i, j] = cg.generate(1)[0]
 
     plt.imshow(tiles)
     plt.show()
