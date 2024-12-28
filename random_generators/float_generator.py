@@ -29,6 +29,8 @@ class NormalRandomGenerator(BaseRandomGenerator):
                 self.v_half_range = None
             case float() if v_half_range > 0:
                 self.v_half_range = v_half_range
+            case int() if v_half_range > 0:
+                self.v_half_range = float(v_half_range)
             case _:
                 raise ValueError("invalid v_half_range %s" % str(v_half_range))
 
@@ -52,6 +54,8 @@ class MultipliedRandomGenerator(BaseRandomGenerator):
         self.rgs = unit_random_generators
 
     def generate(self, size: int | tuple[int, ...]) -> np.ndarray:
+        if isinstance(size, int):
+            size = (size,)
         whole_size = (len(self.rgs), ) + tuple(size)
         whole_arr = np.zeros(whole_size)
         for i in range(whole_size[0]):
