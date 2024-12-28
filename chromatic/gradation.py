@@ -2,7 +2,6 @@ from __future__ import annotations
 import dataclasses
 
 from matplotlib.patches import Polygon
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.transforms as mtransforms
 import numpy as np
@@ -75,6 +74,8 @@ def gen_partial_color_stops(base_color: np.ndarray, shadow_level: float, shadow_
 
 
 def add_gradient_patch(corners: np.ndarray, color_stops: list[ColorStop], ax):
+    # reference: https://gist.github.com/rgerum/a729b68dbaac71ca45707b636a1d1fa0
+
     # convert points and start&end to array
     startend = np.asarray([corners[0], corners[1]], dtype=float)
 

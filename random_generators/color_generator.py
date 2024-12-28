@@ -13,13 +13,6 @@ def default_col_map(x: np.ndarray) -> np.ndarray:
 
 
 def dechromic_col_map(x: np.ndarray) -> np.ndarray:
-    # chromic_vec = np.array(
-    #     [[np.sqrt(2), -np.sqrt(2), 0],
-    #      [-np.sqrt(6), -np.sqrt(6), 2*np.sqrt(6)],
-    #      [0, 0, 0]]
-    # ) / 6
-    # norm_x = x.astype(np.float64)/255
-    # return (chromic_vec @ norm_x) * 255
     s = np.sum(x) / 3
     dec_vec = np.ones_like(x) * s - x
     dec_amp = 0.7
