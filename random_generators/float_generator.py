@@ -47,6 +47,18 @@ class NormalRandomGenerator(BaseRandomGenerator):
         return randoms.reshape(size)
 
 
+class MultipliedRandomGenerator(BaseRandomGenerator):
+    def __init__(self, unit_random_generators: list[BaseRandomGenerator]):
+        self.rgs = unit_random_generators
+
+    def generate(self, size: int | tuple[int, ...]) -> np.ndarray:
+        whole_size = (len(self.rgs), ) + tuple(size)
+        whole_arr = np.zeros(whole_size)
+        for i in range(whole_size[0]):
+            whole_arr[i] = self.rgs[i].generate(size)
+        return np.prod(whole_arr, axis=0)
+
+
 if __name__ == "__main__":
     random_uni = UniformRandomGenerator(-5, 5)
     print(random_uni.generate(8))
