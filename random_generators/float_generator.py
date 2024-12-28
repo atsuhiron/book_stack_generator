@@ -3,7 +3,7 @@ import numpy as np
 from random_generators.base_random_generator import BaseRandomGenerator
 
 
-class UniformBaseRandomGenerator(BaseRandomGenerator):
+class UniformRandomGenerator(BaseRandomGenerator):
     def __init__(self, v_min: float = 0, v_max: float = 1):
         assert v_min < v_max
         self.v_min = v_min
@@ -17,7 +17,7 @@ class UniformBaseRandomGenerator(BaseRandomGenerator):
         return randoms
 
 
-class NormalBaseRandomGenerator(BaseRandomGenerator):
+class NormalRandomGenerator(BaseRandomGenerator):
     def __init__(self, mean: float, std: float, v_half_range: float | str | None = "pos"):
         self.mean = mean
         self.std = std
@@ -48,11 +48,11 @@ class NormalBaseRandomGenerator(BaseRandomGenerator):
 
 
 if __name__ == "__main__":
-    random_uni = UniformBaseRandomGenerator(-5, 5)
+    random_uni = UniformRandomGenerator(-5, 5)
     print(random_uni.generate(8))
 
-    random_norm_unbound = NormalBaseRandomGenerator(0, 5)
+    random_norm_unbound = NormalRandomGenerator(0, 5)
     print(random_norm_unbound.generate(8))
 
-    random_norm_bound = NormalBaseRandomGenerator(0, 5, 2.5)
+    random_norm_bound = NormalRandomGenerator(0, 5, 2.5)
     print(random_norm_bound.generate(8))

@@ -48,11 +48,11 @@ class ColorGenerator(BaseRandomGenerator):
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
-    from random_generators.float_generator import UniformBaseRandomGenerator
+    from random_generators.float_generator import UniformRandomGenerator
 
     tile_size = (6, 10)
     tiles = np.zeros(tile_size + (3,), dtype=np.uint8)
-    cg = ColorGenerator(UniformBaseRandomGenerator(), dechromic_col_map)
+    cg = ColorGenerator(UniformRandomGenerator(), dechromic_col_map)
 
     for i in range(tile_size[0]):
         for j in range(tile_size[1]):
