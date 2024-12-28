@@ -9,5 +9,5 @@ class BaseItem(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def generate_patches(self, origin: tuple[float, float]) -> list[patch.Patch]:
+    def register_patches(self, origin: tuple[float, float], ax):
         pass
