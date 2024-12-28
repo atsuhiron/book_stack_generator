@@ -3,6 +3,16 @@ import numpy as np
 from random_generators.base_random_generator import BaseRandomGenerator
 
 
+class BernoulliRandomGenerator(BaseRandomGenerator):
+    def __init__(self, prob_1: float):
+        assert 0 < prob_1 < 1
+        self.prob_1 = prob_1
+
+    def generate(self, size: int | tuple[int, ...]) -> np.ndarray:
+        randoms = np.random.random(size)
+        return (randoms < self.prob_1).astype(np.float64)
+
+
 class UniformRandomGenerator(BaseRandomGenerator):
     def __init__(self, v_min: float = 0, v_max: float = 1):
         assert v_min < v_max
